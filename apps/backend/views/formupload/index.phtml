@@ -1,0 +1,121 @@
+<script type="text/javascript">
+    $(function () {
+        var uploadFiles = $("#upload-files");
+        var msg = $("#order-form-message");
+
+        $("#upload-form").submit(function(event){
+            var message = {
+                "type": "error",
+                "message": ""
+            };
+            var accept = {
+                ".doc": true,
+                ".docx": true,
+                ".xls": true,
+                ".xlsx": true,
+                ".pdf": true,
+            };
+            var valid = true;
+            if(uploadFiles.prop("value")=="")
+            {
+                valid = false;
+                message['message'] = "Select file to upload!";
+            }else{
+                var files = uploadFiles.get(0).files;
+                var numberOfFile = files.length;
+                for (var i = 0; i < numberOfFile; i++) {
+                    var file = files[i].name;
+                    var ext = file.substr((file.lastIndexOf('.'))).toLocaleLowerCase();
+                    if(!accept[ext])
+                    {
+                        if(message['message']) message['message'] += "<br>";
+                        message['message'] += "+ Not accepted file type: " + file;
+                        valid = false;
+                    }
+                }
+            }
+            msg.removeClass(function (index, className) {
+                return (className.match (/(^|\s)alert-\S+/g) || []).join(' ');
+            });
+            msg.addClass("alert-"+message['type']);
+            if(valid)
+            {
+                message['message'] = "<img src='<?php echo $this->url->getStatic('backend/img/waiting.gif'); ?>' alt='Processing...' />Please be patient while our system is processing!";
+            }
+            else
+            {
+                event.preventDefault();
+            }
+            msg.html(message['message']);
+            msg.show();
+        });
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Upload Download Documents</h3>
+    </div>
+
+
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <form class="form-horizontal" id="upload-form"
+                      action="<?php echo $this->url->get("dashboard/form-upload");?>" method="post"
+                      enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="custom-file-upload col-md-1 " for="upload-files">Upload Form <em class="text-danger">*</em></label>
+                        <div class="col-md-2">
+                            <input id="upload-files" name="upload-files[]" type="file" class="custom-file-upload"  accept="" multiple="multiple" />
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                    <p><strong class="red">Note:</strong></p>
+                    <ul class="red">
+                        <li>File extension: .pdf, .doc, .docx, .xls, .xlsx</li>
+                        <li>File name: must contain keywords, no spaces (use dashes -), lowercase and length <=100 characters</li>
+                    </ul>
+                    <p class="red"> Example: 5-financial-private-account-maintenance-form-v1.pdf</p>
+                </form>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="order-form-message"
+                     class="alert <?php echo isset($message['type'])?"alert-".$message['type']:""; ?>"
+                     style="display:<?php echo isset($message)?"block":"none"?>; ">
+                    <?php echo isset($message['message'])?$message['message']:""; ?>
+                </div>
+                <?php
+                if(!empty($uploadFiles))
+                {
+                    ?>
+                    <div >
+                        <?php
+                        foreach($uploadFiles as $file)
+                        {
+                            ?>
+                            <div class="alert alert-success" style="margin-bottom: 10px;">
+
+                                <img src="<?php echo $this->url->getStatic('backend/img/icon-file.png') ?>" width="40" height="30" />
+                                <a href="<?php echo $file['file_url']; ?>" target="_blank">
+                                    <?php echo $file['file_url']; ?>
+                                </a>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

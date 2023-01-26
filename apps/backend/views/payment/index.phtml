@@ -1,0 +1,224 @@
+<?php
+$urlPage = "?";
+if (strlen($this->dispatcher->getParam("txtSearch")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtSearch" => $this->dispatcher->getParam("txtSearch")));
+}
+if (strlen($this->dispatcher->getParam("txtFromPayment")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtFromPayment" => $this->dispatcher->getParam("txtFromPayment")));
+}
+if (strlen($this->dispatcher->getParam("txtToPayment")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtToPayment" => $this->dispatcher->getParam("txtToPayment")));
+}
+if (strlen($this->dispatcher->getParam("txtFrom")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtFrom" => $this->dispatcher->getParam("txtFrom")));
+}
+if (strlen($this->dispatcher->getParam("txtTo")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtTo" => $this->dispatcher->getParam("txtTo")));
+}
+if (strlen($this->dispatcher->getParam("slcStatus")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcStatus" => $this->dispatcher->getParam("slcStatus")));
+}
+if (strlen($this->dispatcher->getParam("slcMethodPayment")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcMethodPayment" => $this->dispatcher->getParam("slcMethodPayment")));
+}
+
+?>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Make Payment</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<form class="searchForm" name="form-payment" method="post">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row ">
+                        <div class="col-md-1">
+                            <h2>Keyword</h2>
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-control" type="text" name="txtSearch" maxlength="255"
+                                   placeholder="ID, Name, Email" value="<?php echo isset($keyword) ? $keyword : ""; ?>">
+                        </div>
+                        <h2>Status</h2>
+                        <div class="col-md-2">
+                            <select class="form-control" name="slcStatus" id="slcStatus">
+                                <option value="">All Status</option>
+                                <?php echo isset($str_status) ? $str_status : '' ?>
+                            </select>
+                        </div>
+                        <h2>Method payment</h2>
+                        <div class="col-md-2">
+                            <select class="form-control" name="slcMethodPayment" id="slcMethodPayment">
+                                <option value="">All Method Payment</option>
+                                <?php echo isset($str_method_payment) ? $str_method_payment : '' ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row padding-top10 ">
+                        <h2>From </h2>
+                        <div class="col-md-2">
+                            <input name="txtFromPayment" id="txtFromPayment" autocomplete="off" type="text"
+                                   class="form-control datepicker-here" data-timepicker="true" data-time-format='hh:ii'
+                                   placeholder="From Payment"
+                                   value="<?php echo isset($from_payment) ? $from_payment : ''; ?>">
+                        </div>
+                        <h2>To </h2>
+                        <div class="col-md-2">
+                            <input name="txtToPayment" id="txtToPayment" autocomplete="off" type="text"
+                                   class="form-control datepicker-here" data-timepicker="true" data-time-format='hh:ii'
+                                   placeholder="To Payment"
+                                   value="<?php echo isset($to_payment) ? $to_payment : ''; ?>">
+                        </div>
+                        <h2>From date</h2>
+                        <div class="col-md-2">
+                            <input name="txtFrom" id="txtFrom" autocomplete="off" type="text"
+                                   class="form-control datepicker-here" data-timepicker="true" data-time-format='hh:ii'
+                                   placeholder="From Date" value="<?php echo isset($from) ? $from : ''; ?>">
+                        </div>
+                        <h2>To date</h2>
+                        <div class="col-md-2">
+                            <input name="txtTo" id="txtTo" autocomplete="off" type="text"
+                                   class="form-control datepicker-here" data-timepicker="true" data-time-format='hh:ii'
+                                   placeholder="To Date" value="<?php echo isset($to) ? $to : ''; ?>">
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" name="search" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <strong>Total</strong>
+                        <?php echo $list_payments->total_items ?> records
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table_header">
+                            <tr class="headings">
+                                <th width="50px" class="column-title">ID</th>
+                                <th class="column-title">Full Name</th>
+                                <th class="column-title">Email</th>
+                                <th class="column-title">Payment Method</th>
+                                <th class="column-title">Order Date</th>
+                                <th width="" class="column-title">Payment Date</th>
+                                <th class="column-title">Status</th>
+                                <th class="column-title">Amount</th>
+                                <th width="50px" class="column-title no-link last"><span class="nobr">Action </span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="tb_body">
+                            <?php foreach ($list_payments->items as $item) {
+                                ?>
+                                <tr>
+                                    <td class=" ">
+                                        #<?php echo $this->my->formatPaymentID($item->payment_insertdate, $item->payment_id); ?></td>
+                                    <td class=" "><?php echo $item->user_name; ?></td>
+                                    <td class=" "><?php echo $item->user_email; ?></td>
+                                    <td class="text-center"><?php echo $item->payment_method;
+                                        if($item->payment_cardtype){
+                                            echo " - ".$item->payment_cardtype;
+                                        }
+                                        if ($item->payment_isenrolled3d == 'Y') {
+                                            if ($item->payment_ispassed3d == 'Y') {
+                                                echo ' (Passed 3D Secure)';
+                                            }
+                                            else {
+                                                echo ' (Failed 3D Secure)';
+                                            }
+                                        }else if($item->payment_isenrolled3d == 'N'){
+                                            echo ' (None 3D Secure)';
+                                        }
+                                    ?></td>
+                                    <td class="text-center"
+                                        width="180px"><?php echo $this->my->formatDateTime($item->payment_insertdate,false) ?></td>
+                                    <td class="text-center"
+                                        width="180px"><?php echo $item->payment_date > 0 ? $this->my->formatDateTime($item->payment_date,false) : ''; ?></td>
+                                    <?php
+                                    $status = 'default';
+                                    if ($item->payment_status == 'Pending') {
+                                        $status = 'danger';
+                                    } else if ($item->payment_status == 'Success') {
+                                        $status = 'success';
+                                    }
+                                    ?>
+                                    <td class="text-center" width="20px"><span
+                                                class="label label-<?php echo $status; ?>"><?php echo $item->payment_status; ?></span>
+                                    </td>
+                                    <?php
+                                    $orderCurrency = $item->payment_order_currency;
+
+                                        $currencyData['code'] = $orderCurrency;
+
+                                        $currencyDataFromDatabase = \Forexceccom\Models\ForexcecCurrency::findFirst("currency_code = '$orderCurrency'");
+
+                                        if ($currencyDataFromDatabase) {
+                                        $currencyData['symbol'] = $currencyDataFromDatabase->getCurrencySymbolLeft();
+                                        } else {
+                                        $currencyData['symbol'] = $this->globalVariable->mainCurrency;
+                                        }
+                                        ?>
+                                    <td class="text-center" width="150px">
+                                        <?php
+
+                                        if ($orderCurrency)
+                                            echo $currencyData['symbol'] . ' ' . $this->my->formatUSD($item->payment_order_amount);
+                                        else
+                                            echo $currencyData['symbol'] . ' ' . $this->my->formatUSD($item->payment_amount);
+                                        ?>
+                                    </td>
+
+                                    <td class="last">
+                                        <a class="btn btn-primary btn-xs margin-0" style=""
+                                           href="<?php echo $this->url->get("/detail-make-payment?id=" . $item->payment_id); ?>">View</a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6 pull-right">
+                            <?php if ($list_payments->total_pages > 1) { ?>
+                                <nav class="paginate-footer">
+                                    <?php if ($urlPage != "?") $urlPage .= "&";
+                                    $urlPage .= "page=";
+                                    echo $this->my->renderPagination($urlPage, $list_payments->current, $list_payments->total_pages, 2);
+                                    ?>
+                                </nav>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" name="btnExportCsv" class="btn btn-warning alignright">Export to CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('button[name=search]').click(function () {
+            $('form[name=form-payment]').prop('action', '<?php echo $this->url->get('/list-make-payment'); ?>');
+            $('form[name=form-payment]').submit();
+        });
+    });
+</script>
+

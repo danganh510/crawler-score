@@ -1,0 +1,119 @@
+<script>
+    $( document ).ready(function() {
+        $('form[name=emailtemplate-form]').submit(function(event) {
+            var valid = true;
+            if($('input[name=txtType]').val() == '') {
+                $('.msg-type').text('Type field is required.');
+                $('#txtType').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-type').text('');
+                $('#txtType').removeClass("border-red");
+            }
+            if ( $('input[name=txtDaySend]').val().trim() != '' && isNaN($('input[name=txtDaySend]').val())) {
+                $('.msg-day-send').text('Enter a valid Send time.');
+                $('#txtDaySend').addClass("border-red");
+                valid = false;
+            }else {
+                $('.msg-day-send').text('');
+                $('#txtDaySend').removeClass("border-red");
+            }
+            if($('select[name=slcForm]').val() == '') {
+                $('.msg-form').text('Form field is required.');
+                $('#slcForm').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-form').text('');
+                $('#slcForm').removeClass("border-red");
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmEmailtemplate]').prop('disabled', true);
+            }
+        });
+    });
+</script>
+
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="emailtemplate-title">Template Auto Email </h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<?php
+if (!empty($messages['message'])) {
+    ?>
+    <div class="clearfix"></div>
+    <p style="font-size:18px;text-align:center" class="alert alert-<?php echo $messages['typeMessage'] ?>">
+        <?php echo $messages['message']; ?>
+    </p>
+<?php } ?>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title"><?= $title ?></div>
+            <div class="x_content">
+                <br />
+                <form name="emailtemplate-form" id="emailtemplate-form" action="" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Form <span class="red">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select  class="form-control <?php echo isset($messages["form"]) ? $messages["status"] : ""; ?>" name="slcForm" id="slcForm">
+                                <option value="">Select Form</option>
+                                <?php
+                                echo isset($select_form) ? $select_form : "";
+                                ?>
+                            </select>
+                            <span class="text-danger msg-form"><?php echo isset($messages["form"]) ? $messages["form"] : ""?></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtType">Type <span class="red">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["email_type"]) ? $formData["email_type"] : "" ?>" type="text" id="txtType" name="txtType" class="form-control col-md-7 col-xs-12 <?php echo isset($messages["type"]) ? $messages["status"] : ""; ?>" />
+                            <span class="text-danger msg-type"><?php echo isset($messages["type"]) ? $messages["type"] : ""?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtSubject">Send Time (day)  </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="5" value="<?php echo isset($formData["email_day_send"]) ? $formData["email_day_send"] : "" ?>" type="text" id="txtDaySend" name="txtDaySend" class="form-control col-md-7 col-xs-12 <?php echo isset($messages["day_send"]) ? $messages["status"] : ""; ?>" />
+                            <span class="text-danger msg-day-send" id="msg-day-send"><?php echo isset($messages["day_send"]) ? $messages["day_send"] : ""?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtSubject">Subject</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["email_subject"]) ? $formData["email_subject"] : "" ?>" type="text" id="txtSubject" name="txtSubject" class="form-control col-md-7 col-xs-12 <?php echo isset($messages["subject"]) ? $messages["status"] : ""; ?>" />
+                            <span class="text-danger"><?php echo isset($messages["subject"]) ? $messages["subject"] : ""?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtContent">Content</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea class="form-control"  id="txtContent" name ="txtContent" style="width: 750px;height: 212px;"><?php echo isset($formData["email_content"]) ? $formData["email_content"] : ""; ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="radStatus" value="Y" <?php echo (isset($formData["email_status"]) && $formData["email_status"]=="Y" )  ? "checked" : '' ; ?>>Yes<span class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="radStatus" value="N" <?php echo (isset($formData["email_status"]) && $formData["email_status"]=="N" )  ? "checked" : '' ; ?>>No<span class="checkmark"></span></label>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="sbmEmailtemplate" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="list-template-auto-email">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

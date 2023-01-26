@@ -1,0 +1,130 @@
+<?php
+
+use Forexceccom\Models\ForexcecUser;
+use Forexceccom\Repositories\User;
+use Forexceccom\Models\ForexcecPartnership ;
+use Forexceccom\Models\ForexcecPayment;
+use Forexceccom\Repositories\Partnership;
+use Forexceccom\Repositories\Payment;
+?>
+<?php $auth = $this->session->get('auth'); if($auth['role'] == 'Admin') {?>
+<div class="row top_tiles">
+    <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-user"></i></div>
+            <div class="count">
+                <?php echo ForexcecUser::count(); ?></div>
+            <h3>Total User</h3>
+        </div>
+    </div>
+    <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-users"></i></div>
+            <div class="count"><?php echo \Forexceccom\Models\ForexcecPayment::count();?></div>
+            <h3>Total Payment</h3>
+        </div>
+    </div>
+    <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-users"></i></div>
+            <div class="count"><?php echo ForexcecPartnership::count();?></div>
+            <h3>Total Partnership</h3>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>New User </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <?php $list_user = User::getByLimit(10);
+                /**
+                 * @var ForexcecUser $user
+                 */
+                foreach ($list_user as $user) { ?>
+                    <article class="media event">
+                        <a class="pull-left date">
+                            <p class="month"><?php echo date("M", $user->getUserInsertTime()); ?></p>
+                            <p class="day"><?php echo date("d", $user->getUserInsertTime()); ?></p>
+                        </a>
+                        <div class="media-body">
+                            <strong>Name: </strong><a class="title"
+                                                      href="<?php echo $this->url->get("/view-user?id=" . $user->getUserId()); ?>"><?php echo $user->getUserName(); ?></a>
+                            <p><strong>Email: </strong><?php echo $user->getUserEmail(); ?></p>
+                        </div>
+                    </article>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>New  Make Payment</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <?php $list_payment = Payment::getByLimit(10);
+                /**
+                 * @var ForexcecPayment $payment
+                 */
+
+                foreach ($list_payment as $payment){
+                    $status = $payment->getPaymentStatus();
+                    $classStatus = ($status == "Success") ? "success" : "danger" ;
+                    ?>
+                    <article class="media event">
+                        <a class="pull-left date">
+                            <p class="month"><?php echo date("M",$payment->getPaymentInsertDate()); ?></p>
+                            <p class="day"><?php echo date("d",$payment->getPaymentInsertDate()); ?></p>
+                        </a>
+                        <div class="media-body break-word">
+                            <strong>Payment: </strong><a class="title" href="<?php echo $this->url->get("/detail-make-payment?id=".$payment->getPaymentId()); ?> ">#<?php echo $this->my->formatPaymentID($payment->getPaymentInsertdate(),$payment->getPaymentId())." [ $".$payment->getPaymentOrderAmount()."]";?></a>
+                            <p><strong>Status: </strong><span class="label label-<?php echo $classStatus; ?>"><?php echo $status; ?></span></p>
+                        </div>
+                    </article>
+                <?php  }?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>New Partnership </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <?php $list_partnership = Partnership::getByLimit(10);
+                /**
+                 * @var ForexcecPartnership $partnership
+                 */
+
+                foreach ($list_partnership as $partnership){?>
+                    <article class="media event">
+                        <a class="pull-left date">
+                            <p class="month"><?php echo date("M",$partnership->getPartnershipInsertTime()); ?></p>
+                            <p class="day"><?php echo date("d",$partnership->getPartnershipInsertTime()); ?></p>
+                        </a>
+                        <div class="media-body">
+                            <strong>Name: </strong><a class="title" href="<?php echo $this->url->get("/view-partnership?id=".$partnership->getPartnershipId()); ?>">#<?php echo $this->my->formatFormPartnershipID($partnership->getPartnershipInsertTime(),$partnership->getPartnershipId());?></a>
+                            <p><strong>Email: </strong><?php echo $partnership->getPartnershipEmail() ;?></p>
+
+                        </div>
+                    </article>
+                <?php  }?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } else { ?>
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Dashboard</h3>
+        </div>
+    </div>
+<?php } ?>

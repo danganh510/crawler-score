@@ -1,0 +1,328 @@
+<style>
+    #myProgress {
+        width: 100%;
+        background-color: #ddd;
+    }
+
+    #myBar {
+        width: 0%;
+        height: 30px;
+        background-color: #4CAF50;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+    }
+    .role_block .well.no-box{
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    .role_block .well.no-box label{
+        font-weight: normal;
+    }
+    .d-flex-column{
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Tool Translate Table</h3>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div id="myProgress" hidden>
+    <div id="myBar"></div>
+</div>
+<div id="loading" hidden>
+    <img class="lazyload padding-top10" src="<?php echo $this->url->getStatic('backend/'); ?>img/waiting.gif"
+         style="vertical-align:middle;position: relative;z-index: 10001;"/> Processing...
+</div>
+<p hidden class="alert alert-danger msg-error"></p>
+<form class="translate-form padding-top10" name="translate-form" method="" action="">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h3 class="text-danger">NOTE: Tool get data GX/EN: </h3>
+                        <h4 class="text-danger"> - Update all field (Insert new if not exist) on table</h4>
+                        <h4 class="text-danger"> - Translate: Update all field (Insert new if not exist) on table Lang</h4>
+                        <h4 class="text-danger margin-left10" > + Table: Translate all language</h4>
+                        <h4 class="text-danger margin-left10"> + Table SEO: Translate language in (table forexcec_location)</h4>
+                    <div class="row ">
+                        <div class="col-md-6 form-group">
+                            <label>ID Translate</label>
+                            <input maxlength="255"
+                                   value="<?php echo isset($formData["ID"]) ? $formData["ID"] : "" ?>"
+                                   id="txtId"
+                                   class="form-control col-md-7 col-xs-12"
+                                   type="text" name="txtId">
+                            <p class="text-danger msg-id"></p>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-6 form-group">
+                            <label>Table Translate</label>
+                            <select class="form-control"
+                                    name="slTable" id="slTable">
+                                <option value="">Select Table ... </option>
+                                <?php echo isset($slTable) ? $slTable : '' ?>
+                            </select>
+                            <p class="text-danger msg-table"></p>
+                        </div>
+                    </div>
+                    <div class="row" id="columnTables" hidden>
+                        <div class="col-md-3 form-group d-flex-column">
+                            <h3>Column Table</h3>
+                            <div id="listColumnTable"></div>
+                        </div>
+                        <div class="col-md-3 form-group d-flex-column">
+                            <h3>Column Table Lang</h3>
+                            <div id="listColumnTableLang"></div>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <h3>Action</h3>
+                            <div class='role_block'>
+                                <div class='well no-box'>
+                                    <label class='container_checkbox'> Insert
+                                        <input type='checkbox' class='form-control check' name='action[]' checked value='insert' />
+                                        <span class='checkmark_checkbox'></span>
+                                    </label>
+                                    <div class='clearfix'></div>
+                                </div>
+                            </div>
+                            <div class='role_block'>
+                                <div class='well no-box'>
+                                    <label class='container_checkbox'> Update
+                                        <input type='checkbox' class='form-control check' name='action[]' checked value='update' />
+                                        <span class='checkmark_checkbox'></span>
+                                    </label>
+                                    <div class='clearfix'></div>
+                                </div>
+                            </div>
+                            <p class="text-danger msg-action"></p>
+                        </div>
+
+<!--                        <div class="col-md-3 form-group" id="radSEO">-->
+<!--                            <h3>SEO</h3> (Yes: To exclude record xxx_seo = "Y")-->
+<!--                            <div class="col-md-6 col-sm-6 col-xs-12 form-check">-->
+<!--                                <label class="container_radio"><input type="radio" name="radSEO" value="Y" checked>Yes<span class="checkmark"></span></label>-->
+<!--                                <label class="container_radio"><input type="radio" name="radSEO" value="N">No<span class="checkmark"></span></label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <div class="col-md-6 form-group" id="radsss">
+                            <h3>List language excluded</h3>
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-check">
+                                <div class="well pdtop-10 real-boostrap">
+                                    <div class="row">
+                                        <?php foreach ($slLang as $value) { ?>
+                                            <div class="col-md-4">
+                                                <label class="container_checkbox">
+                                                    <?= strtoupper($value['language_code']).' - '. $value['language_name'] ?>
+                                                    <input type="checkbox" class="form-control check"
+                                                           name="langExcluded[]" id="<?= $value['language_code'] ?>" value="<?= $value['language_code'] ?>">
+                                                    <span class="checkmark_checkbox"></span>
+                                                </label>
+                                            </div>
+                                        <?php }?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="btnTranslate" hidden>
+                        <div class="col-md-3 form-group ">
+                            <button id="btnSubmit" type="button" name="translate" class="btn btn-success" style="width: 300px">Translate</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="listURL" hidden>
+                    <h3>List record not update (SEO = Y)</h3>
+                        <h4>EN</h4>
+                        <div id="listURLEn"></div>
+                        <h4>Lang</h4>
+                        <div id="listURLLang"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $("select[name=slTable]").on('change',function (event) {
+            var listTableSpecial = ["ForexcecConfig"];
+            $('#listURL').hide();
+            if (listTableSpecial.indexOf($(this).val()) === -1) {
+                getColumnTable($(this).val());
+            } else {
+                $('#btnTranslate').show();
+                $('#columnTables').hide();
+            }
+        });
+
+        function getColumnTable(tableName) {
+            $.ajax({
+                url: "<?php echo $this->url->get("/get-column-table")?>",
+                cashe: false,
+                type: "POST",
+                dataType: "JSON",
+                data: {'tableName': tableName},
+                success: function (data) {
+                    $('#columnTables').show();
+                    $('#btnTranslate').show();
+                    $('#listColumnTable').html(data.columnTable);
+                    $('#listColumnTableLang').html(data.columnTableLang);
+                    if (data.columnTable == ''){
+                        $('#radSEO').hide();
+                    }else {
+                        $('#radSEO').show();
+                    }
+                }
+            });
+        }
+
+        $("#btnSubmit").on('click',function (event) {
+            $('#listURL').hide();
+            var valid = true;
+            var id = $('input[name=txtId]').val();
+            var tableName = $('select[name=slTable]').val();
+            var seo = $('input[name=radSEO]:checked').val();
+
+            var columnTable = [];
+            var columnTableLang = [];
+            var langExcluded = [];
+            var action = [];
+
+            $('input[name="columnTable[]"]:checked').each(function() {
+                columnTable.push($(this).val());
+            });
+            $('input[name="columnTableLang[]"]:checked').each(function() {
+                columnTableLang.push($(this).val());
+            });
+            $('input[name="langExcluded[]"]:checked').each(function() {
+                langExcluded.push($(this).val());
+            });
+            $('input[name="action[]"]:checked').each(function() {
+                action.push($(this).val());
+            });
+
+            if (id == '') {
+                $('.msg-id').text('This field is required.');
+                $('#txtId').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-id').text('');
+                $('#txtId').removeClass("border-red");
+            }
+            if (tableName == '') {
+                $('.msg-table').text('This field is required.');
+                $('#slTable').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-table').text('');
+                $('#slTable').removeClass("border-red");
+            }
+            if (action.length === 0) {
+                $('.msg-action').text('This field is required.');
+                valid = false;
+            } else {
+                $('.msg-action').text('');
+            }
+            if (!valid) {
+                event.preventDefault();
+            }
+            if (valid) {
+                move(0);
+                $('.msg-error').hide();
+                $('.msg-error').text('');
+                $('#myProgress').show();
+                $('#loading').show();
+                var langSuccess = [];
+                call(id,tableName,langSuccess,0,columnTable,columnTableLang,action,seo,langExcluded);
+                $('button[name=translate]').prop('disabled', true);
+            }
+        });
+        function call(id,tableName,langSuccess,totalLangRun,columnTable,columnTableLang,action,seo,langExcluded){
+            $.ajax({
+                url: "<?php echo $this->url->get("/tool-translate-table")?>",
+                cache: false,
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    'id': id,
+                    'tableName': tableName,
+                    'langSuccess': langSuccess,
+                    'totalLangRun': totalLangRun,
+                    'columnTable': columnTable,
+                    'columnTableLang': columnTableLang,
+                    'action': action,
+                    'seo': seo,
+                    'langExcluded': langExcluded,
+                },
+                success: function(data){
+                    move(data.percent);
+                    $('html').scrollTop(0);
+                    if (data.status === 'processing' && data.message == null){
+                        $('.msg-id').text('');
+                        $('#txtId').removeClass("border-red");
+                        $('.msg-table').text('');
+                        $('#slTable').removeClass("border-red");
+                        call(data.id, data.table, data.langSuccess, data.totalLangRun, data.columnTable, data.columnTableLang, data.action,data.seo,data.langExcluded);
+                    } else {
+                        if (data.status === 'error') {
+                            if (data.message.api) {
+                                $('#myProgress').hide();
+                                $('#loading').hide();
+                                $('.msg-error').show();
+                                $('.msg-error').text(data.message.api);
+                            }
+                            if (data.message.id) {
+                                $('#myProgress').hide();
+                                $('#loading').hide();
+                                $('.msg-id').text(data.message.id);
+                                $('#txtId').addClass("border-red");
+                            }
+                            if (data.message.table) {
+                                $('#myProgress').hide();
+                                $('#loading').hide();
+                                $('.msg-table').text(data.message.table);
+                                $('#slTable').addClass("border-red");
+                            }
+                            if (data.message.action) {
+                                $('#myProgress').hide();
+                                $('#loading').hide();
+                                $('.msg-action').show();
+                                $('.msg-action').text(data.message.action);
+                            }
+                            if (data.message.listLang) {
+                                $('#myProgress').hide();
+                                $('#loading').hide();
+                                $('.msg-error').show();
+                                $('.msg-error').text(data.message.listLang);
+                            }
+                            $('#loading').hide();
+                            $('button[name=translate]').prop('disabled', false);
+                        } else {
+                            $('#loading').hide();
+                            $('button[name=translate]').prop('disabled', false);
+                            $('#listURL').show();
+                            $('#listURLEn').html(data.listURLEn);
+                            $('#listURLLang').html(data.listURLLang);
+                        }
+                    }
+                }
+            });
+        }
+        function move(percent) {
+            var elem = document.getElementById("myBar");
+            var width = percent;
+            elem.style.width = width + "%";
+            elem.innerHTML = width  + "%";
+        }
+    });
+</script>
+

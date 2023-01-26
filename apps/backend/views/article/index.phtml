@@ -1,0 +1,254 @@
+<?php
+$urlPage = "?";
+$location_country_code = isset($location_country_code) ? $location_country_code : '';
+if (strlen($this->dispatcher->getParam("txtSearch")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtSearch" => $this->dispatcher->getParam("txtSearch")));
+}
+if ($this->dispatcher->getParam("slType") != "") {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slType" => $this->dispatcher->getParam("slType")));
+}
+if ($this->dispatcher->getParam("slcCountry") != "") {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcCountry" => $this->dispatcher->getParam("slcCountry")));
+}
+$slcLang = $this->dispatcher->getParam("slcLang");
+if ($this->dispatcher->getParam("slcLang") != "") {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcLang" => $slcLang));
+}
+if ($urlPage != "?") $urlPage .= "&";
+$urlPage .= http_build_query(array("slcLocationCountry" => $location_country_code));
+$radMatch = $this->dispatcher->getParam("radMatch");
+if ($urlPage != "?") $urlPage .= "&";
+$urlPage .= http_build_query(array("radMatch" => $radMatch));
+?>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Article</h3>
+    </div>
+</div>
+<?php if (isset($msg_result['status'])) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-<?php echo $msg_result['status'] ?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['msg']; ?>
+    </div>
+<?php } ?>
+<?php if (isset($msg_delete['success']) && !empty($msg_delete['success'])) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-success alert-dismissible fade in" role="alert">
+        <?php echo $msg_delete['success']; ?>
+    </div>
+<?php } ?>
+<div class="clearfix"></div>
+<form class="searchForm" name="form-type" method="post">
+    <?php $keyword = $this->dispatcher->getParam("txtSearch");
+          $replace = $this->dispatcher->getParam("txtReplace");
+    ?>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row form-group">
+                        <div class="col-md-2">
+                            <h2 class="">Find</h2>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea class="form-control" name="txtSearch"
+                                      placeholder="ID, Name, Summary, Content, Title, Meta Keyword, Meta Description"><?php echo isset($keyword) ? $keyword : ''; ?></textarea>
+                        </div>
+                        <div class="col-md-1">
+                            <h2 class="">Replace</h2>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea class="form-control" name="txtReplace"
+                                      placeholder="Name, Summary, Content, Title, Meta Keyword, Meta Description"><?php echo isset($replace) ? $replace : ''; ?></textarea>
+                        </div>
+                        <div class="col-md-1">
+                            <h2>Type</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="slType" id="slType">
+                                <option value="0">All Type</option>
+                                <?php
+                                echo isset($select_type) ? $select_type : "";
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 15px"">
+                        <div class="col-md-2">
+                            <h2>Location Country</h2>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" name="slcLocationCountry" id="slcLocationCountry">
+                                <?php
+                                echo isset($select_location_country) ? $select_location_country : "";
+                                ?>
+                            </select></div>
+                        <div class="col-md-1">
+                            <h2>Language</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="slcLang" id="slcLang">
+
+                            </select>
+                        </div>
+                        <div class="col-md-4" style="display: flex;justify-content: flex-end;">
+                            <div class="form-check" style="margin-right:20px">
+                                <input class="form-check-input" type="radio" name="radMatch" id="radMatch"
+                                       value="match" <?php echo ($radMatch == 'match') ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="radMatch">
+                                    Match
+                                </label>
+                            </div>
+                            <div class="form-check" style="margin-right:20px">
+                                <input class="form-check-input" type="radio" name="radMatch" id="notMatch"
+                                       value="notmatch" <?php echo ($radMatch == 'notmatch') ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="notMatch">
+                                    Not match
+                                </label>
+                            </div>
+                            <button type="button" name="search" class="btn btn-success">Search</button>
+                            <button style="margin-right:20px;margin-left:20px" type="submit" name="btnReplace" class="btn btn-danger" id="btnReplace" onclick="return confirm('Are you sure you want to Replace?');">Replace
+                            </button>
+                            <a class="btn btn-info"
+                               href="<?php echo $this->url->get("/create-article"); ?>">Add
+                                New</a>
+                        </div>
+
+                    </div>
+                    <div>
+                        <strong>Total</strong>
+                        <?php echo $page->total_items ?> records
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table_header">
+                            <tr class="headings">
+                                <th style="text-align: left" width="50px"><label class="container_checkbox"><input
+                                                type="checkbox" id="checkboxAll"><span
+                                                class="checkmark_checkbox"></span></label></th>
+                                <th width="50px" class="column-title">ID</th>
+                                <th class="column-title">Name</th>
+                                <th class="column-title">Location Country</th>
+                                <th class="column-title">Language</th>
+                                <th width="150px" class="column-title">Type</th>
+                                <th width="160px" class="column-title">Date Update</th>
+                                <th width="50px" class="column-title">Active</th>
+                                <th width="50px" class="column-title no-link last"><span class="nobr">Action </span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="tb_body">
+                            <?php foreach ($page->items as $item) {?>
+                                <tr>
+                                    <td>
+                                        <label class="container_checkbox">
+                                            <input class="check" name="item[]"
+                                                   id="type-checkbox<?php echo $item->getArticleId(); ?>"
+                                                   value="<?php echo $item->getArticleId(); ?>" type="checkbox">
+                                            <span class="checkmark_checkbox"></span>
+                                        </label>
+                                    </td>
+                                    <td class=" "><?php echo $item->getArticleId(); ?></td>
+                                    <td class=" "><?php echo $item->getArticleName(); ?></td>
+                                    <td class=" "><?php echo \Forexceccom\Repositories\Country::getCountryNameOrGlobalByCode($item->getArticleLocationCountryCode()); ?></td>
+                                    <td class=" "><?php echo \Forexceccom\Repositories\Language::getNameByCode($slcLang); ?></td>
+                                    <td class=" "><?php echo Forexceccom\Repositories\Type::getNameByID($item->getArticleTypeId()); ?></td>
+                                    <td class=" "><?php echo $this->my->formatDateTime($item->getArticleUpdateTime(),false); ?></td>
+                                    <td class="text-center" data-title="Active">
+                                        <?php
+                                        $status = $item->getArticleActive();
+                                        $classStatus = ($status == "Y") ? "success" : "danger";
+                                        ?>
+                                        <span class="label label-<?php echo $classStatus; ?>"><?php echo $status; ?></span>
+                                    </td>
+                                    <td class="last">
+                                        <a class="btn btn-primary btn-xs margin-0" style=""
+                                           href="<?php echo $this->url->get("/edit-article?id=" . $item->getArticleId() . "&slcLocationCountry=" . strtoupper($item->getArticleLocationCountryCode()) . "&slcLang=" . $slcLang); ?>">View</a>
+                                    </td>
+                                </tr>
+
+                            <?php } ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label for="slcAction">With Selected:</label>
+                            <select class="form-control" id="slcAction" name="slcAction"
+                                    style="display: inline-block;width: 40%">
+                                <option value="" selected>Please select</option>
+                                <option value="drop">Drop</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <?php if ($page->total_pages > 1) { ?>
+                                <nav class="paginate-footer">
+                                    <?php if ($urlPage != "?") $urlPage .= "&";
+                                    $urlPage .= "page=";
+                                    echo $this->my->renderPagination($urlPage, $page->current, $page->total_pages, 2);
+                                    ?>
+                                </nav>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div>
+            URL education: <br>
+            <?php
+            $arrTypeEducation = [];
+            $arrTypeEducation = \Forexceccom\Repositories\Type::getIdByParent(4,strtolower($location_country_code));//4 is id of Type: education.
+            $link = "https://www.forexcec.com/".strtolower($location_country_code)."/".$slcLang."/education/";
+            foreach ($arrTypeEducation as $type) {
+                $arrArticle = \Forexceccom\Repositories\Article::getByTypeAndActive($type,"Y",$location_country_code);
+                if (count($arrArticle) > 0 ) {
+                    foreach ($arrArticle as $article) {
+                        ?>
+                        <a href="<?= $link.$article->getArticleKeyword()?>"><?= $link.$article->getArticleKeyword()?></a><br>
+            <?php
+                    }
+                }
+            }
+            ?>
+        </div>
+
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('button[name=search]').click(function () {
+            $('form[name=form-type]').prop('action', '<?php echo $this->url->get('/list-article'); ?>');
+            $('form[name=form-type]').submit();
+        });
+
+        $('.delete-all').click(function () {
+            $('form[name=form-type]').prop('action', '<?php echo $this->url->get('/delete-article?slcLocationCountry=' . $location_country_code); ?>');
+            $('form[name=form-type]').submit();
+        });
+
+        $("#slcLocationCountry").change(function () {
+            var country_code = $("#slcLocationCountry option:selected").val();
+            var lang_code = '<?php echo $slcLang; ?>';
+            $.ajax({
+                url: "<?php echo $this->url->get('/getlangbycode-location'); ?>",
+                type: 'POST',
+                data: {country_code: country_code, lang_code: lang_code},
+                success: function (data) {
+                    var getData = JSON.parse(data);
+                    $("#slcLang").html('');
+                    $("#slcLang").append(getData.string_json);
+                }
+            });
+        }).trigger('change');
+    });
+</script>
