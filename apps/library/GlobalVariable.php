@@ -100,14 +100,14 @@ class GlobalVariable extends Component
         $this->programmableSearchEngineCxKey = '4f429654962ca4a4a';
         $this->cronPassword = 'k3FRQ1U0bYHUVSu6';
         $this->tableSEO = array(
-            'ForexcecArticle' => 'Forexceccom\Models\ForexcecArticle',
-            'ForexcecArticleLang' => 'Forexceccom\Models\ForexcecArticleLang',
+            'ForexcecArticle' => 'Score\Models\ForexcecArticle',
+            'ForexcecArticleLang' => 'Score\Models\ForexcecArticleLang',
 
-            'ForexcecType' => 'Forexceccom\Models\ForexcecType',
-            'ForexcecTypeLang' => 'Forexceccom\Models\ForexcecTypeLang',
+            'ForexcecType' => 'Score\Models\ForexcecType',
+            'ForexcecTypeLang' => 'Score\Models\ForexcecTypeLang',
 
-            'ForexcecPage' => 'Forexceccom\Models\ForexcecPage',
-            'ForexcecPageLang' => 'Forexceccom\Models\ForexcecPageLang',
+            'ForexcecPage' => 'Score\Models\ForexcecPage',
+            'ForexcecPageLang' => 'Score\Models\ForexcecPageLang',
         );
     }
 }

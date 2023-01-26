@@ -4,8 +4,8 @@ use Phalcon\Events\Event,
     Phalcon\Mvc\User\Plugin,
     Phalcon\Mvc\Dispatcher,
     Phalcon\Acl;
-use Forexceccom\Repositories\Role;
-use Forexceccom\Models\ForexcecRole;
+use Score\Repositories\Role;
+use Score\Models\ForexcecRole;
 /**
  * Security
  * This is the security plugin which controls that users only have access to the modules they're assigned to

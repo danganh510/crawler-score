@@ -1,8 +1,8 @@
 <?php
 
-namespace Forexceccom\Repositories;
+namespace Score\Repositories;
 
-use Forexceccom\Models\ForexcecBannerLang;
+use Score\Models\ForexcecBannerLang;
 use Phalcon\Mvc\User\Component;
 
 class BannerLang extends Component

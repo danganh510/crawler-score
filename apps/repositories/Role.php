@@ -1,8 +1,8 @@
 <?php
 
-namespace Forexceccom\Repositories;
+namespace Score\Repositories;
 
-use Forexceccom\Models\ForexcecRole;
+use Score\Models\ForexcecRole;
 use Phalcon\Mvc\User\Component;
 
 class Role extends Component {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Forexceccom\Repositories;
+namespace Score\Repositories;
 
-use Forexceccom\Models\ForexcecSentEmailLog;
+use Score\Models\ForexcecSentEmailLog;
 use Phalcon\Mvc\User\Component;
 
 class SentEmailLog extends Component

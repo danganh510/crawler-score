@@ -1,9 +1,9 @@
 <?php
 
-namespace Forexceccom\Repositories;
+namespace Score\Repositories;
 
 use Phalcon\Mvc\User\Component;
-use Forexceccom\Models\ForexcecArticle;
+use Score\Models\ForexcecArticle;
 
 class Article extends Component
 {
@@ -61,8 +61,8 @@ class Article extends Component
             'LOCATION_CODE'=>$location_code
         );
         if ($lang && $lang != $this->globalVariable->defaultLanguage) {
-            $sql = "SELECT a.*, al.* FROM \Forexceccom\Models\ForexcecArticle a 
-                    INNER JOIN \Forexceccom\Models\ForexcecArticleLang al 
+            $sql = "SELECT a.*, al.* FROM \Score\Models\ForexcecArticle a 
+                    INNER JOIN \Score\Models\ForexcecArticleLang al 
                         ON a.article_id = al.article_id AND al.article_lang_code = :LANG: AND a.article_location_country_code = al.article_location_country_code
                     WHERE a.article_active = 'Y' AND a.article_type_id = :TYPE_ID: AND a.article_location_country_code = :LOCATION_CODE:
                     ORDER BY a.article_order ASC ";
@@ -78,7 +78,7 @@ class Article extends Component
                 }
             }
         }else{
-            $sql = "SELECT * FROM Forexceccom\Models\ForexcecArticle 
+            $sql = "SELECT * FROM Score\Models\ForexcecArticle 
                 WHERE article_active = 'Y' AND article_type_id = :TYPE_ID: AND article_location_country_code = :LOCATION_CODE:
                 ORDER BY article_order ASC ";
             if (isset($limit) && is_numeric($limit) && $limit > 0) {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Forexceccom\Backend\Controllers;
+namespace Score\Backend\Controllers;
 
-use Forexceccom\Models\ForexcecUser;
-use Forexceccom\Repositories\Activity;
-use Forexceccom\Repositories\Role;
-use Forexceccom\Repositories\EmailTemplate;
+use Score\Models\ForexcecUser;
+use Score\Repositories\Activity;
+use Score\Repositories\Role;
+use Score\Repositories\EmailTemplate;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
-use Forexceccom\Utils\Validator;
-use Forexceccom\Utils\PasswordGenerator;
+use Score\Utils\Validator;
+use Score\Utils\PasswordGenerator;
 class UserController extends ControllerBase
 {
     public function indexAction()
@@ -386,7 +386,7 @@ class UserController extends ControllerBase
     }
     private function getParameter(){
         $sql = "SELECT *
-                FROM Forexceccom\Models\ForexcecUser
+                FROM Score\Models\ForexcecUser
                 WHERE 1";
         $keyword = trim($this->request->get("txtSearch"));
         $from = trim($this->request->get("txtFrom")); //string

@@ -1,13 +1,13 @@
 <?php
 
-namespace Forexceccom\Backend\Controllers;
+namespace Score\Backend\Controllers;
 
-use Forexceccom\Models\ForexcecConfig;
-use Forexceccom\Models\ForexcecLanguage;
-use Forexceccom\Repositories\Config;
+use Score\Models\ForexcecConfig;
+use Score\Models\ForexcecLanguage;
+use Score\Repositories\Config;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
-use Forexceccom\Repositories\Activity;
-use Forexceccom\Repositories\Language;
+use Score\Repositories\Activity;
+use Score\Repositories\Language;
 
 class ConfigController extends ControllerBase
 {
@@ -15,7 +15,7 @@ class ConfigController extends ControllerBase
     public function indexAction()
     {
         $current_page = $this->request->getQuery('page', 'int');
-        $sql = "SELECT * FROM Forexceccom\Models\ForexcecConfig WHERE  1 ";
+        $sql = "SELECT * FROM Score\Models\ForexcecConfig WHERE  1 ";
         $arrParameter = array();
         $keyword = trim($this->request->get("txtSearch"));
         $lang = $this->request->get("slcLang", array('string', 'trim'));

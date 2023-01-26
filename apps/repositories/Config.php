@@ -1,8 +1,8 @@
 <?php
 
-namespace Forexceccom\Repositories;
+namespace Score\Repositories;
 
-use Forexceccom\Models\ForexcecConfig;
+use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
 
 class Config extends Component

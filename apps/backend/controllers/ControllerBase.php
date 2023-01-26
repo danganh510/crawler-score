@@ -1,8 +1,8 @@
 <?php
 
-namespace Forexceccom\Backend\Controllers;
+namespace Score\Backend\Controllers;
 
-use Forexceccom\Repositories\Role;
+use Score\Repositories\Role;
 
 /**
  * @property \GlobalVariable globalVariable

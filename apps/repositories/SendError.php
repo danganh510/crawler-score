@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Repositories;
+namespace Score\Repositories;
 
 use Phalcon\Mvc\User\Component;
 

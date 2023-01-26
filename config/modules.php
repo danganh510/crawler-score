@@ -5,7 +5,7 @@
  */
 $application->registerModules(array(
     'backend' => array(
-        'className' => 'Forexceccom\Backend\Module',
+        'className' => 'Score\Backend\Module',
         'path' => __DIR__ . '/../apps/backend/Module.php'
     )
 ));

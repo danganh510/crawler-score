@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Google;
+namespace Score\Google;
 
 use General\Models\LanguageSupportTranslate;
 use Google\Cloud\Translate\V3\GcsSource;
@@ -9,7 +9,7 @@ use Google\Cloud\Translate\V3\Glossary\LanguageCodesSet;
 use Google\Cloud\Translate\V3\GlossaryInputConfig;
 use Google\Cloud\Translate\V3\TranslateTextGlossaryConfig;
 use Google\Cloud\Translate\V3\TranslationServiceClient;
-use Forexceccom\Models\ForexcecTranslateHistory;
+use Score\Models\ForexcecTranslateHistory;
 use Phalcon\Mvc\User\Component;
 
 class GoogleTranslate
@@ -17,16 +17,16 @@ class GoogleTranslate
     const LIMIT_CUT_CONTENT = 30000;
     /*private $projectId = '503817953383';
     private $bucketName = 'forexcectranslations';
-    private $fileNameGlosary = 'forexceccomglossary.csv';
+    private $fileNameGlosary = 'Scoreglossary.csv';
     private $locationForGlosary = 'us-central1';
     private $locationFormat = 'global';
-    private $glosaryIdPrefix = 'forexcec_glossary_';*/
+    private $glosaryIdPrefix = 'sc_glossary_';*/
     private $projectId = '250414336140';
     private $bucketName = 'forexcectranslations';
-    private $fileNameGlosary = 'forexceccomglossary.csv';
+    private $fileNameGlosary = 'Scoreglossary.csv';
     private $locationForGlosary = 'us-central1';
     private $locationFormat = 'global';
-    private $glosaryIdPrefix = 'forexcec_glossary_';
+    private $glosaryIdPrefix = 'sc_glossary_';
     private $glossary_id = '';
     private $site_translate = 'admin.forexcec.com';
 

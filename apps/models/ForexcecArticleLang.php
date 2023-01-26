@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Models;
+namespace Score\Models;
 
 class ForexcecArticleLang extends \Phalcon\Mvc\Model
 {

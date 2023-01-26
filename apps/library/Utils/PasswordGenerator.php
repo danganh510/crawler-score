@@ -1,5 +1,5 @@
 <?php
-namespace Forexceccom\Utils;
+namespace Score\Utils;
 
 use Phalcon\Crypt;
 use Phalcon\Mvc\User\Component;

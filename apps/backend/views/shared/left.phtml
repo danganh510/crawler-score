@@ -4,8 +4,8 @@ if (isset($role_function)) {
     $menu_active = 'class="active"';
     $menu_sub_active = 'style="display: block;"';
     $menu_sub_sub_active = 'class="current-page"';
-    $role = new \Forexceccom\Repositories\Role();
-    $controllers = \Forexceccom\Models\ForexcecRole::getControllers();
+    $role = new \Score\Repositories\Role();
+    $controllers = \Score\Models\ForexcecRole::getControllers();
 
     $setting = isset($controllers['setting']) ? $controllers['setting'] : array();
     $check_setting = ($role::checkMenu($role_function, $setting)) ? true : false;

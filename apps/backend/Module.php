@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Backend;
+namespace Score\Backend;
 
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Loader;
@@ -19,12 +19,12 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $loader->registerNamespaces(array(
-            'Forexceccom\Backend\Controllers' => __DIR__ . '/controllers/',
-            'Forexceccom\Models' => __DIR__ . '/../models/',
+            'Score\Backend\Controllers' => __DIR__ . '/controllers/',
+            'Score\Models' => __DIR__ . '/../models/',
             'Register\Models' => __DIR__ . '/../models/register/',
-			'Forexceccom\Repositories' => __DIR__ . '/../repositories/',
-			'Forexceccom\Utils' => __DIR__ . '/../library/Utils/',
-			'Forexceccom\Google' => __DIR__ . '/../library/google-cloud-translate/'
+			'Score\Repositories' => __DIR__ . '/../repositories/',
+			'Score\Utils' => __DIR__ . '/../library/Utils/',
+			'Score\Google' => __DIR__ . '/../library/google-cloud-translate/'
         ));
 
         $loader->register();
@@ -45,7 +45,7 @@ class Module implements ModuleDefinitionInterface
 			//$eventManager = $di->getShared('eventsManager');
 			$eventManager->attach('dispatch', new \Security('backend'));
 			$dispatcher->setEventsManager($eventManager);
-			$dispatcher->setDefaultNamespace("Forexceccom\Backend\Controllers");
+			$dispatcher->setDefaultNamespace("Score\Backend\Controllers");
 			return $dispatcher;
 		});
 

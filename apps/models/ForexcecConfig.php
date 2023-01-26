@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Models;
+namespace Score\Models;
 
 use Phalcon\Db\RawValue;
 
@@ -104,7 +104,7 @@ class ForexcecConfig extends \Phalcon\Mvc\Model
      */
 //    public function initialize()
 //    {
-//        $this->setSchema("Forexceccomcom");
+//        $this->setSchema("Scorecom");
 //    }
 
     /**
@@ -114,7 +114,7 @@ class ForexcecConfig extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'forexcec_config';
+        return 'sc_config';
     }
 
     /**

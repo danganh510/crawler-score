@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Models;
+namespace Score\Models;
 
 class ForexcecUser extends \Phalcon\Mvc\Model
 {
@@ -232,7 +232,7 @@ class ForexcecUser extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'forexcec_user';
+        return 'sc_user';
     }
 
     /**

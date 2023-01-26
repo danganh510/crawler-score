@@ -1,12 +1,12 @@
 <?php
 
-namespace Forexceccom\Backend\Controllers;
+namespace Score\Backend\Controllers;
 
-use Forexceccom\Models\ForexcecRole;
-use Forexceccom\Models\ForexcecUser;
-use Forexceccom\Utils\Validator;
-use Forexceccom\Repositories\Role;
-use Forexceccom\Repositories\Activity;
+use Score\Models\ForexcecRole;
+use Score\Models\ForexcecUser;
+use Score\Utils\Validator;
+use Score\Repositories\Role;
+use Score\Repositories\Activity;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 
 class RoleController extends ControllerBase
@@ -246,7 +246,7 @@ class RoleController extends ControllerBase
 
     private function getParameter()
     {
-        $sql = "SELECT * FROM Forexceccom\Models\ForexcecRole WHERE 1";
+        $sql = "SELECT * FROM Score\Models\ForexcecRole WHERE 1";
         $keyword = trim($this->request->get("txtSearch"));
         $arrParameter = array();
         $validator = new Validator();
@@ -272,7 +272,7 @@ class RoleController extends ControllerBase
         $arr_dir = array();
         $directory_backend = __DIR__ . "/../../backend/controllers/*.php";
         foreach (glob($directory_backend) as $controller) {
-            $className = 'Forexceccom\Backend\Controllers\\' . basename($controller, '.php');
+            $className = 'Score\Backend\Controllers\\' . basename($controller, '.php');
             $className2 = basename($controller, 'Controller.php');
             if (!strpos($className2, '.php')) {
                 $parent_name = lcfirst($className2);

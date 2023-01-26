@@ -1,8 +1,8 @@
 <?php
 
-namespace Forexceccom\Repositories;
-use Forexceccom\Models\ForexcecBanner;
-use Forexceccom\Models\ForexcecType;
+namespace Score\Repositories;
+use Score\Models\ForexcecBanner;
+use Score\Models\ForexcecType;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Di;
 
@@ -58,7 +58,7 @@ class Banner extends Component
 
     public function getArticle ($str = "", $type = 0, $inputslc,$location_code)
     {
-        $sql = "SELECT article_keyword, article_type_id, article_name FROM Forexceccom\Models\ForexcecArticle 
+        $sql = "SELECT article_keyword, article_type_id, article_name FROM Score\Models\ForexcecArticle 
                 WHERE article_type_id = :typeId: AND article_active = 'Y' AND article_location_country_code = :location_code:
                 Order By article_order ASC";
         $data = $this->modelsManager->executeQuery($sql,

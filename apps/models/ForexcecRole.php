@@ -1,6 +1,6 @@
 <?php
 
-namespace Forexceccom\Models;
+namespace Score\Models;
 
 use Phalcon\Db\RawValue;
 
@@ -174,7 +174,7 @@ class ForexcecRole extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'forexcec_role';
+        return 'sc_role';
     }
 
     /**

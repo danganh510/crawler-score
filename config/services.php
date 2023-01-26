@@ -20,7 +20,7 @@ if (!defined('MyS3Secret')) {
 }
 
 if (!defined('MyS3Bucket')) {
-    define('MyS3Bucket', 'forexceccom');
+    define('MyS3Bucket', 'Score');
 }
 if (!defined('MyCloudFrontURL')) {
     define('MyCloudFrontURL', 'https://dovyy1zxit6rl.cloudfront.net/');
@@ -45,9 +45,9 @@ $di = new FactoryDefault();
 $loader = new Loader();
 $loader->registerNamespaces(array(
     'General\Models' => __DIR__ . '/../apps/models/general/',
-    'Forexceccom\Models' => __DIR__ . '/../apps/models/',
-    'Forexceccom\Repositories' => __DIR__ . '/../apps/repositories/',
-    'Forexceccom\Utils' => __DIR__ . '/../apps/library/Utils/'
+    'Score\Models' => __DIR__ . '/../apps/models/',
+    'Score\Repositories' => __DIR__ . '/../apps/repositories/',
+    'Score\Utils' => __DIR__ . '/../apps/library/Utils/'
 ));
 
 $loader->registerDirs(
@@ -872,15 +872,15 @@ $di->set('modelsManager', function () {
 /**
  * Register PHPMailer manager
  */
-$di->set('myMailer', function () {
-    require_once(__DIR__ . "/../apps/library/SMTP/class.phpmailer.php");
-    $mail = new \PHPMailer();
-    $mail->IsSMTP();//telling the class to use SMTP
-    $mail->SMTPAuth = true;
-    $mail->SMTPSecure = "tls";
-    $mail->Host = "email-smtp.us-west-2.amazonaws.com";
-    $mail->Username = "AKIAZPULICYWJ7UI6GUZ";
-    $mail->Password = "BNr0S+jBNdlDm0RtmJIIN8L1dFia0Y5r1R9Sk6Xg2a9r";
-    $mail->CharSet = 'utf-8';
-    return $mail;
-});
+// $di->set('myMailer', function () {
+//     require_once(__DIR__ . "/../apps/library/SMTP/class.phpmailer.php");
+//     $mail = new \PHPMailer();
+//     $mail->IsSMTP();//telling the class to use SMTP
+//     $mail->SMTPAuth = true;
+//     $mail->SMTPSecure = "tls";
+//     $mail->Host = "email-smtp.us-west-2.amazonaws.com";
+//     $mail->Username = "AKIAZPULICYWJ7UI6GUZ";
+//     $mail->Password = "BNr0S+jBNdlDm0RtmJIIN8L1dFia0Y5r1R9Sk6Xg2a9r";
+//     $mail->CharSet = 'utf-8';
+//     return $mail;
+// });
