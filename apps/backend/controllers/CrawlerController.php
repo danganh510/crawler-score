@@ -13,89 +13,51 @@ use Score\Repositories\CrawlerScore;
 use Score\Repositories\Team;
 use Goutte\Client;
 use Score\Models\ScMatch;
+use Score\Repositories\MatchRepo;
+use Score\Repositories\Tournament;
 
 class CrawlerController extends ControllerBase
 {
 
     public function indexAction()
     {
-        $start_time_cron = time();
+        $start_time_cron = time() + 0 * 24*60*60;
         echo "Start crawl data in ".$this->my->formatDateTime(time()) ."/n/r";
         $link =  'https://www.livescores.com';
-        $param_live = "/football/{$this->my->formatDateYMD($start_time_cron)}/?tz=7";
+        $param_time = "/football/{$this->my->formatDateYMD($start_time_cron )}/?tz=7";
+        $param_live = "/football/live/?tz=7";
         $url = $link.$param_live;
-
+      
         $client = new client();
         $crawler = $client->request('GET', $url);
         $list_match = CrawlerScore::Crawl($crawler);
-       
+        $matchRepo = new MatchRepo();
         foreach ($list_match as $match) {
             $home = Team::findByName($match['home']);
-         
             if (!$home) {
-                $home = new ScTeam();
-                
-                $home->setTeamName($match['home']);
-                $home->setTeamActive("Y");
-                $home->save();
-                
+                $home = Team::saveTeam($match['home'], $match['home_svg']);
             }
             $away = Team::findByName($match['away']);
             if (!$away) {
-                $away = new ScTeam();
-                $away->setTeamName($match['away']);
-                $away->setTeamActive("Y");
-                $away->save();
+                $away = Team::saveTeam($match['away'], $match['away_svg']);
             }
-            $matchSave = ScMatch::findFirst([
-                "match_home_id = :home_id: AND match_away_id = :away_id: AND match_status != 'F'",
-                'bind' => [
-                    'home_id' => $home->getTeamId(),
-                    'away_id' => $away->getTeamId(),
-                ]
-            ]);
-            if (!$matchSave) {
-                $matchSave = new ScMatch();
-                $matchSave->setMatchName($match['home'] ." - ". $match['away']);
-                $matchSave->setMatchHomeId($home->getTeamId());
-                $matchSave->setMatchAwayId($away->getTeamId());
-                $matchSave->setMatchInsertTime(time());
-                if (strpos($match['time'],"'") ) {
-                    $time = str_replace("'", "", $match['time']);
-                    $start_time = time() - $time * 60;
-                } elseif ($match['time'] == "FT" ) {
-                    $time = 45;
-                    $start_time = time() - $time * 60;
-                } elseif ($match['time'] == "HT" || $match['time'] == "AET") {
-                    $time = 90;
-                    $start_time = time() - $time * 60;
-                } else {
-                   
-                    $start_time = $this->my->formatDateTimeSendEmail(time()) . " " . $match['time'];
-                   
-                    $start_time = strtotime($start_time);
-                   
-                }
-                $matchSave->setMatchStartTime($start_time);
-          
+            $tournament = Tournament::findByName($match['tournament']['tournament']);
+            if (!$tournament) {
+                $tournament = Tournament::saveTournament($match['tournament']);
             }
-            if (strpos($match['time'],"'")) {
-                $time = str_replace("'", "", $match['time']);
-                $matchSave->setMatchStatus("S");
-              
-            } else {
-                $time = 0;
-                $matchSave->setMatchStatus("W");
+            if (!$home) {
+                echo "can't save home team";
+                continue;
             }
-            $matchSave->setMatchTime($time);
-            $matchSave->setMatchHomeScore($match['home_score']);
-            $matchSave->setMatchAwayScore($match['away_score']);
-            
-  
-            $matchSave->setMatchOrder(1);
-
-            $matchSave->save();
-          
+            if (!$away) {
+                echo "can't save away team";
+                continue;
+            }
+            if (!$tournament) {
+                echo "can't save tournament team";
+                continue;
+            }
+            $matchRepo->saveMatch($match, $home, $away,$tournament);         
         }
         die();
     }

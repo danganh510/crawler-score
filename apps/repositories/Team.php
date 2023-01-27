@@ -17,5 +17,13 @@ class Team extends Component
             ]
         ]);
     }
+    public static function saveTeam($team_name,$image) {
+        $team = new ScTeam();
+        $team->setTeamName($team_name);
+        $team->setTeamSvg($image);
+        $team->setTeamActive("Y");
+        $team->save();
+        return $team;
+    }
 }
  

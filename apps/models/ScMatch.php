@@ -5,6 +5,7 @@ namespace Score\Models;
 class ScMatch extends \Phalcon\Mvc\Model
 {
     protected $match_id;
+    protected $match_tournament_id;
     protected $match_name;
     protected $match_status;
     protected $match_home_id;
@@ -15,6 +16,7 @@ class ScMatch extends \Phalcon\Mvc\Model
     protected $match_time;
     protected $match_start_time;
     protected $match_order;
+    protected $match_link_detail;
 
 
     /**
@@ -22,17 +24,31 @@ class ScMatch extends \Phalcon\Mvc\Model
      */
     public function getMatchId()
     {
-        return $this->Match_id;
+        return $this->match_id;
     }
 
     /**
-     * @param mixed $Match_id
+     * @param mixed $match_id
      */
-    public function setMatchId($Match_id)
+    public function setMatchId($match_id)
     {
-        $this->Match_id = $Match_id;
+        $this->match_id = $match_id;
+    }
+   /**
+     * @return mixed
+     */
+    public function getMatchTournamentId()
+    {
+        return $this->match_tournament_id;
     }
 
+    /**
+     * @param mixed $match_tournament_id
+     */
+    public function setMatchTournamentId($match_tournament_id)
+    {
+        $this->match_tournament_id = $match_tournament_id;
+    }
     /**
      * @return mixed
      */
@@ -192,6 +208,22 @@ class ScMatch extends \Phalcon\Mvc\Model
     public function setMatchOrder($match_order)
     {
         $this->match_order = $match_order;
+    }
+   /**
+     * @return mixed
+     */
+    public function getMatchLinkDetail()
+    {
+        return $this->match_link_detail;
+    }
+
+
+    /**
+     * @param mixed $match_link_detail
+     */
+    public function setMatchLinkDetail($match_link_detail)
+    {
+        $this->match_link_detail = $match_link_detail;
     }
 
     /**

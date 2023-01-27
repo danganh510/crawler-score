@@ -6,6 +6,7 @@ class ScTournament extends \Phalcon\Mvc\Model
 {
     protected $tournament_id ;
     protected $tournament_name;
+    protected $tournament_country;
     protected $tournament_image;
     protected $tournament_order;
     protected $tournament_active;
@@ -43,7 +44,21 @@ class ScTournament extends \Phalcon\Mvc\Model
     {
         $this->tournament_name = $tournament_name;
     }
+    /**
+     * @return mixed
+     */
+    public function getTournamentCountry()
+    {
+        return $this->tournament_country;
+    }
 
+    /**
+     * @param mixed $tournament_country
+     */
+    public function setTournamentCountry($tournament_country)
+    {
+        $this->tournament_country = $tournament_country;
+    }
     /**
      * @return mixed
      */
