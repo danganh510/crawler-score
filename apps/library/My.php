@@ -23,12 +23,15 @@ class My extends Phalcon\Mvc\User\Component
         return $time + $this->globalVariable->timeZone;
     }
 
-    function formatDateTime($time, $showUtc = true)
+    function formatDateTime($time, $showUtc = false)
     {
         //return date('d M Y , H:i', $this->localTime($time)) . " (UTC+08:00)";
         return strftime('%m/%d/%Y %H:%M:%S', $this->localTime($time)) . ($showUtc ? " (" . $this->globalVariable->timeZoneStr . ")" : '');
     }
-
+    function formatDateYMD($time)
+    {
+        return strftime('%Y-%m-%d', $this->localTime($time));
+    }
     function formatDateTimeSendEmail($time)
     {
         return strftime('%m/%d/%Y', $this->localTime($time));

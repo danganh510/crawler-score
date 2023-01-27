@@ -25,7 +25,7 @@ if (!defined('MyS3Bucket')) {
 if (!defined('MyCloudFrontURL')) {
     define('MyCloudFrontURL', 'https://dovyy1zxit6rl.cloudfront.net/');
 }
-
+include __DIR__ . '/../vendor/autoload.php';
 
 /**
  * Read configuration
@@ -200,10 +200,15 @@ $di['router'] = function () {
         "controller" => "index",
         "action" => "index"
     ));
-    $router->add("/login", array(
+    $router->add("/crawler", array(
         "module" => "backend",
-        "controller" => "login",
+        "controller" => "crawler",
         "action" => "index"
+    ));
+    $router->add("/crawler-detail", array(
+        "module" => "backend",
+        "controller" => "crawler",
+        "action" => "detail"
     ));
     $router->add("/logout", array(
         "module" => "backend",
