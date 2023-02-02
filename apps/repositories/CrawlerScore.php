@@ -7,8 +7,7 @@ use Phalcon\Mvc\User\Component;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CrawlerScore extends Component
-{
-    public static function Crawl($crawler){
+{    public static function Crawl($crawler){
         $list_live_match = [];
         $list_live_tournaments = [];
         $index = 0;  
@@ -111,11 +110,9 @@ class CrawlerScore extends Component
                     ];
                 }
  
-                end:
             }
 
         );
-        var_dump($infoTracker);exit;
         return $infoTracker;
     }
 }
