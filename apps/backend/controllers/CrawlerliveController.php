@@ -2,17 +2,25 @@
 
 namespace Score\Backend\Controllers;
 
-use Goutte\Client;
-use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
+use React\EventLoop\Factory;
+use React\Http\Browser;
+use Score\Models\ForexcecConfig;
+use Score\Models\ForexcecLanguage;
+use Score\Models\ScTeam;
+use Score\Repositories\Config;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
-
+use Score\Repositories\Activity;
+use Score\Repositories\Language;
 use Score\Repositories\CrawlerScore;
 use Score\Repositories\Team;
 
 use Score\Models\ScMatch;
 use Score\Repositories\MatchRepo;
 use Score\Repositories\Tournament;
-
+use Clue\React\Buzz\Browse;
+use Goutte\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 class CrawlerController extends ControllerBase
 {
@@ -24,9 +32,7 @@ class CrawlerController extends ControllerBase
         $link =  'https://www.livescores.com';
         $param_time = "/football/{$this->my->formatDateYMD($start_time_cron)}/?tz=7";
         $param_live = "/football/live/?tz=7";
-        $url = $link . $param_time;
-        // $urlbasesofa = "https://api.sofascore.com";
-        // $paramApiSofa = "/api/v1/sport/football/events/live";
+        $url = $link . $param_live;
 
 
         $client = new Client();
@@ -157,7 +163,7 @@ class CrawlerController extends ControllerBase
 
                 # Run phantomjs script
                 exec($escaped_command);
-
+         
                 # Retrieve url code source
                 $html_content = file_get_contents($here . $file_name);
 

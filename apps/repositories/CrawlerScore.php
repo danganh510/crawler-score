@@ -7,7 +7,52 @@ use Phalcon\Mvc\User\Component;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CrawlerScore extends Component
-{    public static function Crawl($crawler){
+{    
+    public static function CrawlSofa($crawler){
+        $list_live_match = [];
+        $list_live_tournaments = [];
+        $index = 0;  
+        $tournaments = [];
+        var_dump($crawler);
+        exit;
+
+         $crawler->filter('.xb > div')->each(
+            function (Crawler $item) use (&$list_live_tournaments,&$list_live_match) {
+                //bb là class lấy giải đấu, xf là class lấy trận đấu
+                if ($item->filter(".bb > span")->count() > 0) {
+                    $title = $item->filter(".bb > span")->text();
+                    $country = explode("-",$title)[0];
+                    $tournament = explode("-",$title)[1];
+                    $list_live_tournaments[] = [
+                        'country' => trim($country),
+                        'tournament' => trim($tournament),
+                        'index' => count($list_live_tournaments),
+                    ];
+                }
+                if ($item->filter(".xf > a")->count() > 0) {
+                    $href_detail = $item->filter(".xf > a")->attr('href');
+                    $time = $item->filter(".xf > a > div > .Kg")->text();
+                    $home = $item->filter(".xf > a > div > .bh > .ch > span")->text();
+                    $home_score = $item->filter(".xf > a > div > .bh > .Zg > .hh")->text();
+                    $away = $item->filter(".xf > a > div > .bh > .dh > span")->text();
+                    $away_score = $item->filter(".xf > a > div > .bh > .Zg > .ih")->text();
+                    $list_live_match[] = [
+                        'time' => trim($time),
+                        'home' => trim($home),
+                        'home_score' => trim($home_score),
+                        'away' => trim($away),
+                        'away_score' => trim($away_score),
+                        'href_detail' => trim($href_detail),
+                        'tournament' => $list_live_tournaments[count($list_live_tournaments) - 1]
+                    ];
+                }
+                end:
+            }
+
+        );
+        return $list_live_match;
+    }
+    public static function CrawlLivescores($crawler){
         $list_live_match = [];
         $list_live_tournaments = [];
         $index = 0;  
