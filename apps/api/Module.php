@@ -2,91 +2,71 @@
 
 namespace Score\Api;
 
+use Phalcon\DiInterface;
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Loader;
+use Phalcon\Mvc\Dispatcher as Dispatcher;
 use Phalcon\Mvc\View;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\ModuleDefinitionInterface;
+
 
 class Module implements ModuleDefinitionInterface
 {
 
     /**
-     * Registers the module auto-loader
+     * Registers an autoloader related to the module
+     *
+     * @param DiInterface $di
      */
-    public function registerAutoloaders(\Phalcon\DiInterface $di = NULL)
+    public function registerAutoloaders(DiInterface $di = null)
     {
-
         $loader = new Loader();
-
         $loader->registerNamespaces(array(
-            'Score\Api\Controllers' => __DIR__ . '/controllers/',
+            'Score\Api\Controllers' => __DIR__ . '/controllers'
         ));
-
         $loader->register();
     }
 
     /**
-     * Registers the module-only services
+     * Registers services related to the module
      *
-     * @param Phalcon\DI $di
+     * @param DiInterface $di
      */
-    public function registerServices(\Phalcon\DiInterface $di = NULL)
+    public function registerServices(DiInterface $di)
     {
-
         /**
          * Read configuration
          */
-        $config = include __DIR__ . "/../../config/config.php";
-		
-		//Registering a dispatcher
-		$di->set('dispatcher', function () use ($di) {
-			$dispatcher = new \Phalcon\Mvc\Dispatcher();
-			//Attach a event listener to the dispatcher
-			$eventManager = new \Phalcon\Events\Manager();
-			//$eventManager = $di->getShared('eventsManager');
-			$security = new \Security('frontend');
-			$eventManager->attach('dispatch', $security);
-			$dispatcher->setEventsManager($eventManager);
-			$dispatcher->setDefaultNamespace("Score\Api\Controllers");
-			return $dispatcher;
-		});
+        //$config = $di['config'];
+
+        //Registering a dispatcher
+        $di->set('dispatcher', function () use ($di) {
+            $eventsManager = new EventsManager();
+
+            $dispatcher = new Dispatcher();
+            $dispatcher->setEventsManager($eventsManager);
+            $dispatcher->setDefaultNamespace('Score\Api\Controllers');
+            return $dispatcher;
+        });
 
         /**
          * Setting up the view component
          */
-		$di['view'] = function () {
-			$view = new \Phalcon\Mvc\View();
-			$view->setViewsDir(__DIR__ . '/views/');
-			$view->registerEngines(array(
-				'.volt' => function ($view, $di) {
-		
-					$volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
-		
-					$volt->setOptions(array(
-						'compiledPath' => __DIR__ . '/cache/',
-						'compiledSeparator' => '_'
-					));
-		
-					return $volt;
-				},
-				'.phtml' => '\Phalcon\Mvc\View\Engine\Php'
-			));
-			$view->setLayoutsDir('layouts/');
-			return $view;
-        };
-        /**
-         * Database connection is created based in the parameters defined in the configuration file
-         */
-        $di['db'] = function () use ($config) {
-            return new DbAdapter(array(
-                "host" => $config->database->host,
-                "username" => $config->database->username,
-                "password" => $config->database->password,
-                "dbname" => $config->database->name,
-				'charset'=> $config->database->charset
-            ));
+        $di['view'] = function () {
+            $view = new View();
+
+            if (defined('ENABLE_VIEW_MODE') && ENABLE_VIEW_MODE) {
+                $view->setViewsDir(__DIR__ . '/views/');
+                $view->registerEngines(array(
+                    '.phtml' => '\Phalcon\Mvc\View\Engine\Php'
+                ));
+                $view->setLayoutsDir('layouts/');
+            }
+            else {
+                $view->disable();
+            }
+            return $view;
         };
 
     }
-
 }

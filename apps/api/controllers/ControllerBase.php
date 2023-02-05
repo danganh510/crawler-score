@@ -2,15 +2,8 @@
 
 namespace Score\Api\Controllers;
 
-use Score\Models\ScLanguage;
-use Score\Models\ScNewspaper;
-use Score\Repositories\Article;
-use Score\Repositories\CommunicationChannel;
-use Score\Repositories\Config;
-use Score\Repositories\Device;
-use Score\Repositories\Language;
-use Score\Repositories\Location;
-use Score\Repositories\Type;
+
+use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 
 /**
@@ -30,7 +23,8 @@ class ControllerBase extends Controller
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
         header('Access-Control-Max-Age: 86400');
         header('Access-Control-Allow-Headers: *');
-        $headerBear = $this->getAuthorizationHeader();
+
+       
         // var_dump($headerBear);
         // exit;
         $this->requestParams = $_GET;
@@ -48,34 +42,33 @@ class ControllerBase extends Controller
         //     return $response;
         // }
     }
-    public function beforeExecuteRoute($dispatcher){
-  
-        // $this->apiKey = $keys[$this->apiKid];
-        // $this->beginTimestamp = microtime(true);
+    public function beforeExecuteRoute($dispatcher)
+    {
 
-        // /*skip this step if this is hard return*/
-        // if($this->dispatcher->getActionName() == self::HARD_RETURN_ACTION) return;
-        // $this->payload['iss'] = self::ISS;
-        // $this->payload['iat'] = time();
-        // $this->payload['isSuccessful'] = false;
-        // if($this->login_required && !$this->checkLogin()){
-        //     $this->dispatcher->forward(array(
-        //         "module"	=>	"payment",
-        //         "controller" => $this->dispatcher->getControllerName(),
-        //         "action" =>  self::HARD_RETURN_ACTION,
-        //         "params" => array("payload" => $this->payload),
-        //     ));
-        // }
+        $headerBear = $this->getAuthorizationHeader();
+        
+        if ($headerBear != "Beaer ".BEAR_TOKEN) {
+            
+            $payload = [
+                'status' => false,
+                'code' => 401,
+                'message' => "Unauthorized"
+            ];
+            $response = new Response();
+            $response->setContent(json_encode($payload));
+            return $response;
+            
+        }
     }
 
     public function afterExecuteRoute($dispatcher)
     {
         $res = $dispatcher->getReturnedValue();
-        if(is_null($res)) return;
+        if (is_null($res)) return;
         $dispatcher->setReturnedValue([]);
         // $res = JWT::encode($res, $this->apiKey, self::algById($this->apiKid), $this->apiKid);
         $res = json_encode($res, JSON_PRETTY_PRINT);
-       
+
         $this->response->setContent($res);
         return $this->response->send();
     }

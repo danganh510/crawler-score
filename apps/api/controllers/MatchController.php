@@ -39,28 +39,13 @@ class MatchController extends ControllerBase
             if (!$home || !$away) {
                 continue;
             }
-            
-            $events[] = [
-                'tournament' => [
-                    'name' => $match['tournament_name'],
-                    'slug' => $this->create_slug($match['tournament_name']),
-                    'roundInfo' => $match['tournament_round'],
-                    'category' => [
-                        'name' => $match['tournament_country'],
-                        'slug' => $match['tournament_country'],
-                        'sport' => [
-                            'name' => "football",
-                            'slug' => "football"
-                        ],
-                        'flag' => $match['tournament_country'],
-                        'countryCode' => "countryCode"
-                    ]
-                ],
+            $matchInfo = [
                 'status' => [
                     'description' => $match['match_status'],
                     'type' => $match['match_status']
                 ],
                 'matchInfo' => [
+                    'id' => $match['match_id'],
                     'time_start' => $match['match_start_time'],
                     'time' => $match['match_time'],
                 ],
@@ -76,8 +61,9 @@ class MatchController extends ControllerBase
                 ],
                 'awayTeam' => [
                     'id' => $away->getTeamId(),
-                    'name' =>$away->getTeamName(),
-                    'slug' => $this->create_slug($away->getTeamName(),),
+                    'name' => $away->getTeamName(),
+                    'slug' => $this->create_slug($away->getTeamName(),
+                    ),
                     'svg' => "svg",
                     'score' => [
                         'score' => $match['match_away_score'],
@@ -85,6 +71,32 @@ class MatchController extends ControllerBase
                     ]
                 ],
             ];
+            if (isset($events[$match['tournament_id']])) {
+                $events[$match['tournament_id']]['match'][$match['match_id']] = $matchInfo;
+            } else {
+                $events[$match['tournament_id']] = [
+                    'tournament' => [
+                        'name' => $match['tournament_name'],
+                        'slug' => $this->create_slug($match['tournament_name']),
+                        'roundInfo' => $match['tournament_round'],
+                        'category' => [
+                            'name' => $match['tournament_country'],
+                            'slug' => $match['tournament_country'],
+                            'sport' => [
+                                'name' => "football",
+                                'slug' => "football"
+                            ],
+                            'flag' => $match['tournament_country'],
+                            'countryCode' => "countryCode"
+                        ]
+                    ],
+                    'match' => [
+                        $match['match_id'] => $matchInfo
+                    ]
+     
+                ];
+            }
+         
            
         }
       
