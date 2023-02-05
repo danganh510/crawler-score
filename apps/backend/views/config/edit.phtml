@@ -1,5 +1,0 @@
-<?php include('model.phtml'); ?>
-<script>
-    $('.form_title').html('Form Edit');
-    $('form[name=config-form]').prop('action','<?php echo $this->url->get('/edit-config?id=').$formData["config_key"]; ?>');
-</script>

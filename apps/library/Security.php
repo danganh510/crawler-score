@@ -48,6 +48,7 @@ class Security extends Plugin
             /*Guest resources*/
             $publicResources = array(
                 'backendcrawler' => array('index', 'detail'),
+                'apimatch' => array('*'),
             );
             foreach ($publicResources as $resource => $actions) {//$resource is key, $actions is value
                 $acl->addResource(new \Phalcon\Acl\Resource($resource), $actions);

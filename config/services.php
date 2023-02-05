@@ -823,6 +823,13 @@ $di['router'] = function () {
         "action" => "changeissubscribe"
     ));
 
+    $router->add('/get-list-match', array(
+        "module" => "api",
+        "controller" => 'match',
+        "action" => "list"
+    ));
+
+
     $router->handle();
     return $router;
 };

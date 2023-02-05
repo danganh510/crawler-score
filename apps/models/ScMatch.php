@@ -15,6 +15,9 @@ class ScMatch extends \Phalcon\Mvc\Model
     protected $match_insert_time;
     protected $match_time;
     protected $match_start_time;
+    protected $match_start_day;
+    protected $match_start_month;
+    protected $match_start_year;
     protected $match_order;
     protected $match_link_detail;
 
@@ -191,6 +194,51 @@ class ScMatch extends \Phalcon\Mvc\Model
     public function setMatchStartTime($match_start_time)
     {
         $this->match_start_time = $match_start_time;
+    }
+        /**
+     * @return mixed
+     */
+    public function getMatchStartDay()
+    {
+        return $this->match_start_day;
+    }
+
+    /**
+     * @param mixed $match_start_day
+     */
+    public function setMatchStartDay($match_start_day)
+    {
+        $this->match_start_day = $match_start_day;
+    }
+        /**
+     * @return mixed
+     */
+    public function getMatchStartMonth()
+    {
+        return $this->match_start_month;
+    }
+
+    /**
+     * @param mixed $match_start_month
+     */
+    public function setMatchStartMonth($match_start_month)
+    {
+        $this->match_start_month = $match_start_month;
+    }
+        /**
+     * @return mixed
+     */
+    public function getMatchStartYear()
+    {
+        return $this->match_start_year;
+    }
+
+    /**
+     * @param mixed $match_start_year
+     */
+    public function setMatchStartYear($match_start_year)
+    {
+        $this->match_start_year = $match_start_year;
     }
 
     /**

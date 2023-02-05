@@ -13,8 +13,6 @@ class CrawlerScore extends Component
         $list_live_tournaments = [];
         $index = 0;  
         $tournaments = [];
-        var_dump($crawler);
-        exit;
 
          $crawler->filter('.xb > div')->each(
             function (Crawler $item) use (&$list_live_tournaments,&$list_live_match) {
@@ -66,10 +64,11 @@ class CrawlerScore extends Component
                     $country = explode("-",$title)[0];
                     $tournament = explode("-",$title)[1];
                     $list_live_tournaments[] = [
-                        'country' => trim($country),
-                        'tournament' => trim($tournament),
+                        'country' => mb_ereg_replace('[^\x20-\x7E]+', '', $country),
+                        'tournament' => mb_ereg_replace('[^\x20-\x7E]+', '', $tournament) ,
                         'index' => count($list_live_tournaments),
                     ];
+               
                 }
                 if ($item->filter(".xf > a")->count() > 0) {
                     $href_detail = $item->filter(".xf > a")->attr('href');

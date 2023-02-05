@@ -25,5 +25,14 @@ class Team extends Component
         $team->save();
         return $team;
     }
+    public static function getTeamById($team_id) {
+        $team = ScTeam::findFirst([
+            'team_id = :id:',
+            'bind' => [
+                'id' => $team_id
+            ]
+        ]);
+        return $team ;
+    }
 }
  
